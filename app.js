@@ -1,12 +1,11 @@
 const fs = require('fs');
 const express = require('express');
-
+const morgan = require('morgan');
 const app = express();
-
-const port = 3000;
 
 //Middlewares
 app.use(express.json());
+app.use(morgan('dev'));
 
 //File Storage
 const tours = JSON.parse(
@@ -69,6 +68,37 @@ const deleteTour = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This Api end point is not ready'
+  });
+};
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This Api end point is not ready'
+  });
+};
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This Api end point is not ready'
+  });
+};
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This Api end point is not ready'
+  });
+};
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This Api end point is not ready'
+  });
+};
+
 app
   .route('/api/v1/tours')
   .get(getAllTours)
@@ -80,6 +110,18 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+app
+  .route('/api/v1/users')
+  .get(getAllUsers)
+  .post(createUser);
+
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
+
+const port = 3000;
 app.listen(port, () => {
   console.log(`Application Running at port ${port}...`);
 });
