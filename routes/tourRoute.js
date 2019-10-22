@@ -5,10 +5,12 @@ const {
   getTour,
   updateTour,
   deleteTour,
-  checkBody
+  getTourStats
 } = require('../controllers/tourController');
 
 const router = express.Router();
+
+router.route('/stats').get(getTourStats);
 
 router
   .route('/')
