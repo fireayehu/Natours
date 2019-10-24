@@ -4,7 +4,9 @@
   "description": "learning node, express and mongodb",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb server.js"
   },
   "author": "Fireayehu Zekarias",
   "license": "ISC",
@@ -14,5 +16,8 @@
     "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "slugify": "^1.3.5"
+  },
+  "devDependencies": {
+    "ndb": "^1.1.5"
   }
 }

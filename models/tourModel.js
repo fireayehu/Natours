@@ -29,7 +29,7 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     default: 4.5,
     min: [1, 'Rating Average must be greater than 1'],
-    max: [1, 'Rating Average must be less than 5']
+    max: [5, 'Rating Average must be less than 5']
   },
   ratingsQuantity: {
     type: Number,
@@ -57,7 +57,8 @@ const tourSchema = new mongoose.Schema({
   startDates: [Date],
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
+    select: false
   }
 });
 
