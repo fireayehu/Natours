@@ -41,11 +41,15 @@ exports.errorHandler = (err, req, res, next) => {
     } else if (err.code === 11000) {
       const message = err.errmsg.match(/"(.*?)"/g);
       err = new AppError(`Duplicate value ${message[0]}`, 400);
-    } else if (err) {
+    } else if (err.name === 'ValidationError') {
       const message = Object.values(err.errors)
         .map(error => error.message)
         .join(', ');
       err = new AppError(`Invalid data: ${message}`, 400);
+    } else if (err.name === 'JsonWebTokenError') {
+      err = new AppError('Invalid token', 401);
+    } else if (err.name === 'TokenExpiredError') {
+      err = new AppError('The token has expired', 401);
     }
 
     productionError(err, res);
