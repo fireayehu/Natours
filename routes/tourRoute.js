@@ -9,7 +9,7 @@ const {
   getMonthlyPlan
 } = require('../controllers/tourController');
 
-const { verifyUser } = require('./../controllers/authController');
+const { verifyUser, restrictUser } = require('./../controllers/authController');
 
 const router = express.Router();
 
@@ -25,6 +25,6 @@ router
   .route('/:id')
   .get(getTour)
   .patch(updateTour)
-  .delete(deleteTour);
+  .delete(verifyUser, restrictUser('admin', 'lead-guid'), deleteTour);
 
 module.exports = router;
