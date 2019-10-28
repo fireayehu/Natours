@@ -7,13 +7,15 @@ const {
   updateUser,
   deleteUser,
   updateCurrentUser,
-  deleteCurrentUser
+  deleteCurrentUser,
+  getCurrentUser
 } = require('../controllers/userController');
 
 const {
   signup,
   login,
   verifyUser,
+  restrictUser,
   forgotPassword,
   resetPassword,
   updatePassword
@@ -25,19 +27,25 @@ router.post('/signup', signup);
 router.post('/login', login);
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
-router.patch('/updatePassword', verifyUser, updatePassword);
-router.patch('/update', verifyUser, updateCurrentUser);
-router.delete('/delete', verifyUser, deleteCurrentUser);
+
+router.use(verifyUser);
+
+router.get('/profile', getCurrentUser, getUser);
+router.patch('/updatePassword', updatePassword);
+router.patch('/update', updateCurrentUser);
+router.delete('/delete', deleteCurrentUser);
+
+router.use(restrictUser('admin'));
 
 router
   .route('/')
-  .get(verifyUser, getAllUsers)
+  .get(getAllUsers)
   .post(createUser);
 
 router
   .route('/:id')
-  .get(verifyUser, getUser)
-  .patch(verifyUser, updateUser)
-  .delete(verifyUser, deleteUser);
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 module.exports = router;

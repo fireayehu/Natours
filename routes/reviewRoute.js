@@ -9,15 +9,20 @@ const {
   updateReview,
   deleteReview
 } = require('./../controllers/reviewController');
+
 const router = express.Router({ mergeParams: true });
+
+router.use(verifyUser);
 
 router
   .route('/')
-  .get(verifyUser, getAllReviews)
-  .post(verifyUser, restrictUser('user'), setUserAndTourId, createReview)
-  .patch(verifyUser, updateReview)
-  .delete(verifyUser, deleteReview);
+  .get(getAllReviews)
+  .post(restrictUser('user', 'admin'), setUserAndTourId, createReview);
 
-router.route('/:id').get(verifyUser, getReview);
+router
+  .route('/:id')
+  .get(getReview)
+  .patch(restrictUser('user', 'admin'), updateReview)
+  .delete(restrictUser('user', 'admin'), deleteReview);
 
 module.exports = router;
