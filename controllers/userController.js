@@ -1,7 +1,12 @@
 const User = require('./../models/userModel');
-const APIFeatures = require('./../utils/apiFeatures');
 const AppError = require('./../utils/appError');
 const { catchAsync } = require('./errorController');
+const {
+  getAll,
+  getOne,
+  updateOne,
+  deleteOne
+} = require('./../utils/factoryHandler');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -31,40 +36,14 @@ exports.deleteCurrentUser = catchAsync(async (req, res, next) => {
   res.status(204).json({ status: 'success', data: null });
 });
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(User.find(), req.query)
-    .filter()
-    .sort()
-    .limitField()
-    .paginate();
-  const users = await features.query;
-
-  res
-    .status(200)
-    .json({ status: 'success', results: users.length, data: { users } });
-});
-
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'This Api end point is not ready'
+    message: 'This /signup end point for creating user'
   });
 };
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This Api end point is not ready'
-  });
-};
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This Api end point is not ready'
-  });
-};
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This Api end point is not ready'
-  });
-};
+
+exports.getAllUsers = getAll(User);
+exports.getUser = getOne(User);
+exports.updateUser = updateOne(User);
+exports.deleteUser = deleteOne(User);

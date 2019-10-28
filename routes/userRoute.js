@@ -36,8 +36,8 @@ router
 
 router
   .route('/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+  .get(verifyUser, getUser)
+  .patch(verifyUser, updateUser)
+  .delete(verifyUser, deleteUser);
 
 module.exports = router;
