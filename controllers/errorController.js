@@ -40,7 +40,7 @@ exports.errorHandler = (err, req, res, next) => {
       err = new AppError(`Invalid ${err.path}: ${err.value}`, 400);
     } else if (err.code === 11000) {
       const message = err.errmsg.match(/"(.*?)"/g);
-      err = new AppError(`Duplicate value ${message[0]}`, 400);
+      err = new AppError(`Duplicate value ${message ? message[0] : ''}`, 400);
     } else if (err.name === 'ValidationError') {
       const message = Object.values(err.errors)
         .map(error => error.message)

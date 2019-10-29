@@ -6,7 +6,9 @@ const {
   updateTour,
   deleteTour,
   getTourStats,
-  getMonthlyPlan
+  getMonthlyPlan,
+  getTourWithIn,
+  getTourDistance
 } = require('../controllers/tourController');
 
 const { verifyUser, restrictUser } = require('./../controllers/authController');
@@ -23,6 +25,14 @@ router
     restrictUser('admin', 'lead-guide', 'guide'),
     getMonthlyPlan
   );
+
+router
+  .route('/tour-within/:distance/center/:latlng/unit/:unit')
+  .get(verifyUser, getTourWithIn);
+
+router
+  .route('/tour-distance/:latlng/unit/:unit')
+  .get(verifyUser, getTourDistance);
 
 router
   .route('/')
