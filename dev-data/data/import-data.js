@@ -17,15 +17,15 @@ mongoose
     console.log('Database Connected Succefully');
   });
 
-const dataT = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
+//const dataT = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 const dataU = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
-const dataR = JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8'));
+//const dataR = JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8'));
 
 const importData = async () => {
   try {
-    await Tour.create(dataT);
+    //await Tour.create(dataT);
     await User.create(dataU, { validateBeforeSave: false });
-    await Review.create(dataR);
+    //await Review.create(dataR);
     console.log('DB created');
   } catch (err) {
     console.log(err);
@@ -34,9 +34,9 @@ const importData = async () => {
 
 const deleteData = async () => {
   try {
-    await Tour.deleteMany();
+    // await Tour.deleteMany();
     await User.deleteMany();
-    await Review.deleteMany();
+    //await Review.deleteMany();
     console.log('DB deleted');
   } catch (err) {
     console.log(err);

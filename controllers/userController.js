@@ -1,3 +1,5 @@
+const multer = require('multer');
+
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const { catchAsync } = require('./errorController');
@@ -7,6 +9,29 @@ const {
   updateOne,
   deleteOne
 } = require('./../utils/factoryHandler');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
+  }
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Invalid Image or Image Format', 400), false);
+  }
+};
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+exports.uploadUserPhoto = upload.single('photo');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -28,6 +53,7 @@ exports.updateCurrentUser = catchAsync(async (req, res, next) => {
     return next(new AppError('This route is not for password update.', 400));
   }
   const filterdObj = filterObj(req.body, 'name', 'email');
+  if (req.file) filterdObj.photo = req.file.filename;
   const user = await User.findByIdAndUpdate(req.user._id, filterdObj, {
     new: true,
     runValidators: true

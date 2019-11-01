@@ -1,5 +1,4 @@
 const express = require('express');
-
 const {
   getAllUsers,
   createUser,
@@ -8,7 +7,8 @@ const {
   deleteUser,
   updateCurrentUser,
   deleteCurrentUser,
-  getCurrentUser
+  getCurrentUser,
+  uploadUserPhoto
 } = require('../controllers/userController');
 
 const {
@@ -32,7 +32,7 @@ router.use(verifyUser);
 
 router.get('/profile', getCurrentUser, getUser);
 router.patch('/updatePassword', updatePassword);
-router.patch('/update', updateCurrentUser);
+router.patch('/update', uploadUserPhoto, updateCurrentUser);
 router.delete('/delete', deleteCurrentUser);
 
 router.use(restrictUser('admin'));
