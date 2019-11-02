@@ -8,7 +8,9 @@ const {
   getTourStats,
   getMonthlyPlan,
   getTourWithIn,
-  getTourDistance
+  getTourDistance,
+  uploadTourImages,
+  resizeTourImages
 } = require('../controllers/tourController');
 
 const { verifyUser, restrictUser } = require('./../controllers/authController');
@@ -42,7 +44,13 @@ router
 router
   .route('/:id')
   .get(getTour)
-  .patch(verifyUser, restrictUser('admin', 'lead-guide'), updateTour)
+  .patch(
+    verifyUser,
+    restrictUser('admin', 'lead-guide'),
+    uploadTourImages,
+    resizeTourImages,
+    updateTour
+  )
   .delete(verifyUser, restrictUser('admin', 'lead-guide'), deleteTour);
 
 module.exports = router;

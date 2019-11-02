@@ -11,16 +11,6 @@ const {
   deleteOne
 } = require('./../utils/factoryHandler');
 
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/img/users');
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.mimetype.split('/')[1];
-//     cb(null, `user-${req.user._id}-${Date.now()}.${ext}`);
-//   }
-// });
-
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -66,14 +56,13 @@ exports.updateCurrentUser = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(new AppError('This route is not for password update.', 400));
   }
-  console.log('update current user', req.file);
   const filterdObj = filterObj(req.body, 'name', 'email');
   if (req.file) filterdObj.photo = req.file.filename;
+
   const user = await User.findByIdAndUpdate(req.user._id, filterdObj, {
     new: true,
     runValidators: true
   });
-
   res.status(200).json({ status: 'success', data: { user } });
 });
 
