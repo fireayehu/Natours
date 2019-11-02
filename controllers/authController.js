@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const { catchAsync } = require('./errorController');
-const sendEmail = require('./../utils/email');
+const Email = require('./../utils/email');
 
 const getToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
@@ -23,7 +23,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.verifyPassword(password, user.password))) {
     return next(new AppError('Invalid Email or Password', 401));
   }
-
   const token = getToken(user._id);
   res.status(200).json({
     status: 'success',
@@ -34,7 +33,8 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.signup = catchAsync(async (req, res, next) => {
   const user = await User.create(req.body);
 
-  jwt.coo;
+  const url = `${req.protocol}/${req.get('host')}`;
+  await new Email(user, url).sendWelcome();
   const token = getToken(user._id);
   res.status(201).json({
     status: 'success',
@@ -105,11 +105,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   )}/api/v1/users/resetPassword/${token}`;
   const message = `Forgot your password? send a PATCH request to this url ${resetUrl} if you did not forgot your password ignore this email.`;
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your password reset token',
-      message
-    });
+    // await sendEmail({
+    //   email: user.email,
+    //   subject: 'Your password reset token',
+    //   message
+    // });
 
     res.status(200).json({
       status: 'success',
